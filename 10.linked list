@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+typedef struct Node Node;
+
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertNode(Node** head, int data) {
+    Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        Node* currentNode = *head;
+        while (currentNode->next != NULL) {
+            currentNode = currentNode->next;
+        }
+        currentNode->next = newNode;
+    }
+}
+
+void deleteNode(Node** head, int data) {
+    Node* currentNode = *head;
+    Node* previousNode = NULL;
+    while (currentNode != NULL && currentNode->data != data) {
+        previousNode = currentNode;
+        currentNode = currentNode->next;
+    }
+    if (currentNode == NULL) {
+        return;
+    }
+    if (previousNode == NULL) {
+        *head = currentNode->next;
+    } else {
+        previousNode->next = currentNode->next;
+    }
+    free(currentNode);
+}
+void printList(Node* head) {
+    Node* currentNode = head;
+    while (currentNode != NULL) {
+        printf("%d ", currentNode->data);
+        currentNode = currentNode->next;
+    }
+    printf("\n");
+}
+int main() {
+    Node* head = NULL;
+    insertNode(&head, 5);
+    insertNode(&head, 10);
+    insertNode(&head, 15);
+    printList(head);
+    deleteNode(&head, 10);
+    printList(head);
+    return 0;
+}
